@@ -30,5 +30,28 @@ public class SecurityConfig {
         return httpSecurity.build();
 
     }
+    @Bean
+    public ClientRegistrationRepository registrationRepository(){
+
+        return new InMemoryClientRegistrationRepository(clientRegistration());
+    }
+
+    private ClientRegistration clientRegistration(){
+        return ClientRegistration.withRegistrationId("authorization-service")
+
+                .clientId("greeting-service-app")
+                .clientSecret("secret4greeting")
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+                .scope(OidcScopes.OPENID, "user.read", "user.write")
+                .authorizationUri("http://localhost:8080/oauth2/authorize")
+                .userInfoUri("http://localhost:8080/userinfo")
+                .tokenUri("http://localhost:8080/oauth2/token")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .issuerUri("http://localhost:8080")
+                .jwkSetUri("http://localhost:8080/oauth2/jwks")
+                .build();
+    }
+
 
 }
