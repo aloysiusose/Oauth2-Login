@@ -1,0 +1,24 @@
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: GREETING_SERVICE
+
+  security:
+    oauth2:
+      client:
+        registration:
+          authorization-service:
+            provider: spring
+            client-id: greeting-service-app
+            client-secret: secret4greeting
+            client-authentication-method: client_secret_basic
+            authorization-grant-types: client_credentials, authorization-code, refresh_token
+            scope: openid, user.read, user.write
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          spring:
+            issuer-uri: http://localhost:8080
+
